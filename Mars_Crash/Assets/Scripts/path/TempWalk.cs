@@ -9,9 +9,8 @@ public class TempWalk : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log(_waypoints[1].position - _waypoints[0].position);
-        transform.parent = _waypoints[3];
-        transform.position = _waypoints[3].position;
+        transform.parent = _waypoints[0];
+        transform.position = _waypoints[0].position;
         StartCoroutine(Slerp(1));
     }
 
@@ -34,6 +33,9 @@ public class TempWalk : MonoBehaviour
             if (t >= 1)
             {
                 transform.position = _waypoints[_target].position;
+                if (_target == _waypoints.Length - 1)break;
+                _target++;
+                StartCoroutine(Slerp(1));
                 break;
             }
         }
