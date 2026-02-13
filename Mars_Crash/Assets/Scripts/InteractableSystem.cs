@@ -42,6 +42,7 @@ public class InteractableSystem : MonoBehaviour
         if (_selected != null && Input.GetMouseButton(0))
         {
             // Update drag positioni
+            //Ray ray = _mainCam.ScreenPointToRay(Input.GetTouch(0).position);
             Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
             _selected.OnPointerDrag(ray);
         }
