@@ -1,9 +1,11 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class SlideInteractable : Interactable
 {
     [SerializeField] private Vector3 _movementAxis = Vector3.right;
     [SerializeField] private float _slideSpeed = 4f;
+    [SerializeField] private DOTweenAnimation _animation;
 
     private Vector3 _startPosition;
     private Vector3 _targetPosition;
@@ -19,6 +21,10 @@ public class SlideInteractable : Interactable
     {
         _startPosition = transform.position;
         _hasTarget = false;
+        if (_animation == null)
+            return;
+
+        _animation.DORestart(true);
     }
 
     public override void OnPointerDrag(Ray pointerRay)
@@ -46,6 +52,12 @@ public class SlideInteractable : Interactable
             transform.position = _targetPosition;
             _hasTarget = false;
         }
+
+        if (_animation == null)
+            return;
+
+        Debug.Log($"Restart _animation {_animation}");
+        _animation.DORestart(true);
 
         Transition(InteractableStates.Idle);
     }

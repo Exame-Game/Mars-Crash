@@ -33,6 +33,8 @@ public abstract class Interactable : MonoBehaviour
     public virtual void OnPointerDown(Vector3 worldHitPoint) { }
     public virtual void OnPointerDrag(Ray pointerRay) { }
     public virtual void OnPointerReleased() { }
+    public virtual void OnPointerUnHover() { }
+    public virtual void OnPointerHover() { }
 
     // Override these in subclasses as needed
     protected virtual void OnEnterState(InteractableStates state) { }
