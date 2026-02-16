@@ -746,13 +746,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 592355933}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81d73a68013df884dba69a421fe00121, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TouchManager
-  _mainCamera: {fileID: 1097012677}
-  _player: {fileID: 1215301215}
+  _mainCamera: {fileID: 0}
+  _player: {fileID: 0}
 --- !u!1 &729784040
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,6 +1253,7 @@ GameObject:
   - component: {fileID: 1215301218}
   - component: {fileID: 1215301217}
   - component: {fileID: 1215301216}
+  - component: {fileID: 1215301220}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1353,6 +1354,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1215301220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215301215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23004906db77c1a4380efb0d4e0d953f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestRotate
+  rotatespeed: 10
 --- !u!1 &1497942089
 GameObject:
   m_ObjectHideFlags: 0
@@ -2007,8 +2021,8 @@ SceneRoots:
   - {fileID: 1552970970}
   - {fileID: 1690550698}
   - {fileID: 729784041}
-  - {fileID: 1215301219}
   - {fileID: 540955119}
+  - {fileID: 1215301219}
   - {fileID: 459306912}
   - {fileID: 592355935}
   - {fileID: 1192893070}
