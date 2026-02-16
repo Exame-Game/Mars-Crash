@@ -56,7 +56,6 @@ public class SlideInteractable : Interactable
         if (_animation == null)
             return;
 
-        Debug.Log($"Restart _animation {_animation}");
         _animation.DORestart(true);
 
         Transition(InteractableStates.Idle);
