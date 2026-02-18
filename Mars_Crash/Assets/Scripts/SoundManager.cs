@@ -12,29 +12,28 @@ public class SoundManager : MonoBehaviour
         if (Instance != null)
         {
             Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    public void PlaySound3D(AudioClip clip, Vector3 position)
+    public void PlaySound3D(Vector3 position, AudioClip clip)
     {
-        if (clip != null)
+        if (clip == null)
         {
-            AudioSource.PlayClipAtPoint(clip, position);
+            Debug.LogWarning("Attempted to play a null audio clip.");
+            return;
+           
         }
-        else
-        {
-            Debug.LogWarning("Attempted to play a null audio clip.");  
-        }
+
+        AudioSource.PlayClipAtPoint(clip, position);
     }
 
-    public void PlaySound3D(string soundName, Vector3 position)
+    public void PlaySound3D(Vector3 position, string soundName)
     {
-        PlaySound3D(sfxLibrary.GetClipFromName(soundName), position);
+        PlaySound3D( position, sfxLibrary.GetClipFromName(soundName));
     }
 
     public void PlaySound2D(string soundName)

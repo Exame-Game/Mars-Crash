@@ -14,15 +14,14 @@ public class MusicManager : MonoBehaviour
         if (Instance != null)
         {
             Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
-    
-    public void PlayMusic(string trackName, float fadeDuration = 0.5f)
+
+    public void PlayMusic(string trackName, float fadeDuration = 0.5F)
     {
         StartCoroutine(AnimateMusicCrossfade(musicLibrary.GetClipFromName(trackName), fadeDuration));
     }
@@ -35,7 +34,6 @@ public class MusicManager : MonoBehaviour
             percent += Time.deltaTime * 1 / fadeDuration;
             musicSource.volume = Mathf.Lerp(1f, 0f, percent);
             yield return null;
-
         }
 
         musicSource.clip = nextTrack;
