@@ -1,6 +1,10 @@
 using DG.Tweening;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class HandleInteractable : Interactable
 {
     [Header("Rotation Settings")]
@@ -11,7 +15,9 @@ public class HandleInteractable : Interactable
     [SerializeField] private float _snapAngleIncrement = 90f;
 
     [Header("Optional Animation")]
-    [SerializeField] private DOTweenAnimation _animation;
+    [SerializeField] private DOTweenAnimation _grabAnimation;
+    [SerializeField] private DOTweenAnimation _lockAnimation;
+
 
     public bool _isLocked;
 
@@ -24,6 +30,11 @@ public class HandleInteractable : Interactable
     private float _currentRotation;
     private float _targetRotation;
     private float _initialDragAngle;
+
+    [Header("Debug")]
+    [SerializeField] private bool _debugDrawPlane = true;
+    [SerializeField] private Color _debugPlaneColor = new Color(0f, 1f, 1f, 0.25f);
+    [SerializeField] private int _debugPlaneSegments = 36;
 
     protected override void Start()
     {
@@ -47,15 +58,15 @@ public class HandleInteractable : Interactable
         _hasValidPointer = false;
         _isFirstDragFrame = true;
 
-        if (_animation != null)
-            _animation.DOPause();
+        if (_grabAnimation != null)
+            _grabAnimation.DOPause();
 
         Transition(InteractableStates.Selected);
     }
 
     public override void OnPointerDrag(Ray pointerRay)
     {
-        if (!_isDragging) 
+        if (!_isDragging)
             return;
 
         Vector3 worldAxis = _rotationAxis.normalized;
@@ -83,8 +94,8 @@ public class HandleInteractable : Interactable
         else
             _targetRotation = _currentRotation;
 
-        if (_animation != null)
-            _animation.DORestart(true);
+        if (_grabAnimation != null)
+            _grabAnimation.DORestart(true);
 
         Transition(InteractableStates.Idle);
     }
@@ -139,7 +150,17 @@ public class HandleInteractable : Interactable
             }
         }
     }
-     
+
+    public void LockHandle(bool locked)
+    {
+        _isLocked = locked;
+        if (_lockAnimation != null)
+            if (locked)
+                _lockAnimation.DORestart(true);
+            else
+                _lockAnimation.DOPlayBackwards();
+    }
+
     private void ApplyRotation()
     {
         Vector3 worldAxis = _rotationAxis.normalized;
@@ -159,5 +180,65 @@ public class HandleInteractable : Interactable
         transform.position = newPosition;
 
         transform.rotation = Quaternion.AngleAxis(_currentRotation, worldAxis) * Quaternion.identity;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!_debugDrawPlane) 
+            return;
+
+        Vector3 worldAxis = _rotationAxis.normalized;
+        Transform anchor = _rotationAnchor != null ? _rotationAnchor : transform;
+        Vector3 center = anchor.position;
+
+        // Find the furthest child from the anchor projected onto the rotation plane
+        float radius = 0f;
+        foreach (Transform child in GetComponentsInChildren<Transform>())
+        {
+            if (child == anchor) 
+                continue;
+
+            Vector3 toChild = child.position - center;
+            float dist = Vector3.ProjectOnPlane(toChild, worldAxis).magnitude;
+            if (dist > radius)
+                radius = dist;
+        }
+
+        if (radius < 0.0001f) 
+            radius = 0.5f; // fallback
+
+        int segments = Mathf.Max(3, _debugPlaneSegments);
+
+        Vector3 u = Vector3.ProjectOnPlane(transform.forward, worldAxis);
+        if (u.sqrMagnitude < 0.0001f) 
+            u = Vector3.ProjectOnPlane(Vector3.forward, worldAxis);
+
+        u.Normalize();
+        Vector3 v = Vector3.Cross(worldAxis, u).normalized;
+
+        Color prevColor = Gizmos.color;
+
+#if UNITY_EDITOR
+        Color handleColor = _debugPlaneColor;
+        handleColor.a = Mathf.Clamp01(_debugPlaneColor.a);
+        Handles.color = handleColor;
+        Handles.DrawSolidDisc(center, worldAxis, radius);
+#endif
+
+        Gizmos.color = new Color(_debugPlaneColor.r, _debugPlaneColor.g, _debugPlaneColor.b, 1f);
+        Vector3 prevPoint = center + u * radius;
+        for (int i = 1; i <= segments; i++)
+        {
+            float angle = (i * Mathf.PI * 2f) / segments;
+            Vector3 point = center + (u * Mathf.Cos(angle) + v * Mathf.Sin(angle)) * radius;
+            Gizmos.DrawLine(prevPoint, point);
+            prevPoint = point;
+        }
+
+        Gizmos.DrawLine(center - u * radius, center + u * radius);
+        Gizmos.DrawLine(center - v * radius, center + v * radius);
+        Gizmos.DrawLine(center, center + worldAxis * (radius * 0.5f));
+
+        Gizmos.color = prevColor;
     }
 }
