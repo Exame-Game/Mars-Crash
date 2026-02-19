@@ -26,4 +26,9 @@ public class OverlayMenu : MonoBehaviour
         MusicManager.Instance.PlayMusic("MainMenu", 0.5f);
         _volumeSettings.SaveVolume();
     }
+
+    public void TestSFX()
+    {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
+    }
 }

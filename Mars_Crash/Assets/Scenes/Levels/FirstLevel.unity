@@ -1706,7 +1706,6 @@ GameObject:
   - component: {fileID: 6954561593428576000}
   - component: {fileID: 4943123661821614492}
   - component: {fileID: 2417627017462009501}
-  - component: {fileID: 1577296180306384896}
   m_Layer: 5
   m_Name: TestSFX
   m_TagString: Untagged
@@ -1797,19 +1796,6 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: 9af1849bc3908df4c96078eb47fc8c3f, type: 2}
   musicSlider: {fileID: 1559614317}
   sfxSlider: {fileID: 1783904249}
---- !u!114 &1577296180306384896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55002811861736426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d83d088e2e5298641b7d204b9da00539, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlaySFX
-  sfxName: ButtonClick
 --- !u!222 &1594254107290977777
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1960,9 +1946,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1577296180306384896}
-        m_TargetAssemblyTypeName: PlaySFX, Assembly-CSharp
-        m_MethodName: PlaySound
+      - m_Target: {fileID: 7684759833757860540}
+        m_TargetAssemblyTypeName: OverlayMenu, Assembly-CSharp
+        m_MethodName: TestSFX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2965,20 +2951,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 523c77977f7a72a44806cbd2d5dcc2bb, type: 3}
---- !u!114 &8264746784011227566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8937437898170433583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d92f1106c990a944a0b531d46bf29d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SwitchMusic
-  trackName: 
-  fadeDuration: 1
 --- !u!1 &8465439713313820320
 GameObject:
   m_ObjectHideFlags: 0
@@ -3172,7 +3144,6 @@ GameObject:
   - component: {fileID: 5589857444519373954}
   - component: {fileID: 8843736882359762560}
   - component: {fileID: 9104475530710977705}
-  - component: {fileID: 8264746784011227566}
   m_Layer: 5
   m_Name: Return to Menu
   m_TagString: Untagged
