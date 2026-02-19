@@ -6,6 +6,7 @@ public class InteractableSystem : MonoBehaviour
 
     private Camera _mainCam;
     private Interactable _selected;
+    private Interactable _settling; // runs StateUpdate after deselect
 
     private void Awake()
     {
@@ -16,6 +17,13 @@ public class InteractableSystem : MonoBehaviour
     {
         HandlePointer();
         _selected?.StateUpdate();
+
+        if (_settling != null && _settling != _selected)
+        {
+            _settling.StateUpdate();
+            if (_settling._currentState == InteractableStates.Idle)
+                _settling = null;
+        }
     }
 
     private void HandlePointer()
@@ -35,14 +43,14 @@ public class InteractableSystem : MonoBehaviour
 
         if (_selected != null && Input.GetMouseButtonUp(0))
         {
+            Debug.Log($"Released: {_selected.gameObject.name}", _selected.gameObject);
             _selected.OnPointerReleased();
+            _settling = _selected;
             Deselect();
         }
 
         if (_selected != null && Input.GetMouseButton(0))
         {
-            // Update drag positioni
-            //Ray ray = _mainCam.ScreenPointToRay(Input.GetTouch(0).position);
             Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
             _selected.OnPointerDrag(ray);
         }

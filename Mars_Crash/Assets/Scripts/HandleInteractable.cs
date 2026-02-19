@@ -18,10 +18,10 @@ public class HandleInteractable : Interactable
     [SerializeField] private DOTweenAnimation _grabAnimation;
     [SerializeField] private DOTweenAnimation _lockAnimation;
 
-
     public bool _isLocked;
 
     private Vector3 _currentPointerPosition;
+    private Vector3 _initialForward;
 
     private bool _isDragging;
     private bool _hasValidPointer;
@@ -49,17 +49,26 @@ public class HandleInteractable : Interactable
         _currentRotation = 0f;
     }
 
+
     public override void OnPointerDown(Vector3 worldHitPoint)
     {
-        if (_isLocked)
+        if (_isLocked) 
             return;
 
         _isDragging = true;
         _hasValidPointer = false;
         _isFirstDragFrame = true;
 
+        // Capture reference direction ONCE when drag begins
+        Vector3 worldAxis = _rotationAxis.normalized;
+        _initialForward = Vector3.ProjectOnPlane(transform.forward, worldAxis);
+        if (_initialForward.sqrMagnitude < 0.0001f)
+            _initialForward = Vector3.ProjectOnPlane(Vector3.forward, worldAxis);
+
+        _initialForward.Normalize();
+
         if (_grabAnimation != null)
-            _grabAnimation.DOPause();
+            DOTween.Pause("grab");
 
         Transition(InteractableStates.Selected);
     }
@@ -83,19 +92,20 @@ public class HandleInteractable : Interactable
 
     public override void OnPointerReleased()
     {
+        if (_isLocked) 
+            return;
+
         _isDragging = false;
         _hasValidPointer = false;
 
+        // Just set the target, let OnUpdateState handle the actual movement
         if (_snapToAngles)
-        {
-            Debug.Log($"Snapping from {_currentRotation} to nearest increment of {_snapAngleIncrement}");
             _targetRotation = Mathf.Round(_currentRotation / _snapAngleIncrement) * _snapAngleIncrement;
-        }
         else
             _targetRotation = _currentRotation;
 
         if (_grabAnimation != null)
-            _grabAnimation.DORestart(true);
+            DOTween.Restart("grab");
 
         Transition(InteractableStates.Idle);
     }
@@ -112,13 +122,14 @@ public class HandleInteractable : Interactable
     {
         if (state == InteractableStates.Moving && _hasValidPointer)
         {
-            Vector3 worldAxis = _rotationAxis.normalized;
+            //Debug.Log("Moving & Pointer correct");
+            Vector3 worldAxis = _rotationAnchor.TransformDirection(_rotationAxis).normalized;
             Vector3 fromAnchorToPointer = _currentPointerPosition - _rotationAnchor.position;
             fromAnchorToPointer = Vector3.ProjectOnPlane(fromAnchorToPointer, worldAxis);
 
             if (fromAnchorToPointer.sqrMagnitude > 0.0001f)
             {
-                Vector3 referenceDirection = Vector3.ProjectOnPlane(transform.forward, worldAxis);
+                Vector3 referenceDirection = _initialForward;
                 if (referenceDirection.sqrMagnitude < 0.0001f)
                     referenceDirection = Vector3.ProjectOnPlane(Vector3.forward, worldAxis);
 
@@ -138,27 +149,36 @@ public class HandleInteractable : Interactable
                 ApplyRotation();
             }
         }
-        else if (state == InteractableStates.Idle && _snapToAngles)
+        else if (state == InteractableStates.Idle)
         {
-            Debug.Log($"Snapping from {_currentRotation} to {_targetRotation}");
-            if (Mathf.Abs(Mathf.DeltaAngle(_currentRotation, _targetRotation)) > 0.01f)
+            float angleDiff = Mathf.Abs(Mathf.DeltaAngle(_currentRotation, _targetRotation));
+            if (angleDiff > 0.01f)
             {
-                Debug.Log($"Current: {_currentRotation}, Target: {_targetRotation}");
                 float rotationDelta = _rotationSpeed * Time.deltaTime;
-                _currentRotation = Mathf.MoveTowardsAngle(_currentRotation, _targetRotation, rotationDelta);
-                ApplyRotation();
+                _currentRotation = _targetRotation;
+                ApplyRotation(true);
+            }
+            else if (angleDiff > 0f)
+            {
+                _currentRotation = _targetRotation;
+                ApplyRotation(true);
             }
         }
     }
 
     public void LockHandle(bool locked)
     {
-        _isLocked = locked;
+        _isLocked = !_isLocked;
         if (_lockAnimation != null)
-            if (locked)
-                _lockAnimation.DORestart(true);
+            if (_isLocked)
+            {
+                DOTween.Restart("lock");
+                DOTween.Pause("grab");
+            }
             else
-                _lockAnimation.DOPlayBackwards();
+            {
+                DOTween.PlayBackwards("lock");
+            }
     }
 
     private void ApplyRotation()
@@ -177,9 +197,39 @@ public class HandleInteractable : Interactable
         Vector3 rotatedDirection = rotation * baseDirection;
         Vector3 newPosition = _rotationAnchor.position + rotatedDirection * distance;
 
+
         transform.position = newPosition;
 
         transform.rotation = Quaternion.AngleAxis(_currentRotation, worldAxis) * Quaternion.identity;
+    }
+
+    private void ApplyRotation(bool smoothing, float duration = 0.3f)
+    {
+        Vector3 worldAxis = _rotationAxis.normalized;
+
+        Vector3 initialDirection = transform.position - _rotationAnchor.position;
+        float distance = initialDirection.magnitude;
+
+        Quaternion rotation = Quaternion.AngleAxis(_currentRotation, worldAxis);
+
+        Vector3 baseDirection = Vector3.ProjectOnPlane(initialDirection, worldAxis).normalized;
+        if (baseDirection.sqrMagnitude < 0.0001f)
+            baseDirection = Vector3.ProjectOnPlane(Vector3.forward, worldAxis).normalized;
+
+        Vector3 rotatedDirection = rotation * baseDirection;
+        Vector3 targetPosition = _rotationAnchor.position + rotatedDirection * distance;
+        Quaternion targetRotation = Quaternion.AngleAxis(_currentRotation, worldAxis);
+
+        if (smoothing)
+        {
+            transform.DOMove(targetPosition, duration).SetEase(Ease.OutCubic);
+            transform.DORotateQuaternion(targetRotation, duration).SetEase(Ease.OutCubic);
+        }
+        else
+        {
+            transform.position = targetPosition;
+            transform.rotation = targetRotation;
+        }
     }
 
     private void OnDrawGizmos()
