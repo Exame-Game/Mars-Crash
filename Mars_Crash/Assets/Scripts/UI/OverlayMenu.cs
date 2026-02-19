@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class OverlayMenu : MonoBehaviour
 {
+    [SerializeField] private VolumeSettings _volumeSettings;
     [SerializeField] private GameObject _overlayMenu;
     [SerializeField] private GameObject _overlayMenuButton;
 
@@ -10,19 +11,19 @@ public class OverlayMenu : MonoBehaviour
     {
         _overlayMenu.SetActive(true);
         _overlayMenuButton.SetActive(false);
-        VolumeSettings.Instance.LoadVolume();
+        _volumeSettings.LoadVolume();
     }
 
     public void Close()
     {
         _overlayMenu.SetActive(false);
         _overlayMenuButton.SetActive(true);
-        VolumeSettings.Instance.SaveVolume();
+        _volumeSettings.SaveVolume();
     }
     public void MainMenu()
     {
-        SceneSwitch.Instance.ScenenChanger("MainMenu");
+        SceneSwitch.Instance.SceneChanger("MainMenu");
         MusicManager.Instance.PlayMusic("MainMenu", 0.5f);
-        VolumeSettings.Instance.SaveVolume();
+        _volumeSettings.SaveVolume();
     }
 }

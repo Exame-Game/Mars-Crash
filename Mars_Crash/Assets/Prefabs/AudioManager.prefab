@@ -211,7 +211,7 @@ MonoBehaviour:
   musicTracks:
   - trackName: MainMenu
     clip: {fileID: 8300000, guid: b9ec5922da5ac794ca54c37a7122c2b7, type: 3}
-  - trackName: Level 1
+  - trackName: FirstLevel
     clip: {fileID: 8300000, guid: ab11caba7d50be34a9edad580c395f76, type: 3}
 --- !u!114 &1313581555015656627
 MonoBehaviour:
