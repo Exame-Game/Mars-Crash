@@ -225,7 +225,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4699d2ad447d1547bc33f5753368c2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _mainMenuScene: 1
   musicLibrary: {fileID: 5587332554133026308}
   musicSource: {fileID: 8045839182499255079}
 --- !u!1 &7524876729476976721

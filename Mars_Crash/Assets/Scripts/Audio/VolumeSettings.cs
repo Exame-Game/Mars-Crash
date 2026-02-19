@@ -2,35 +2,24 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class OverlayMenu : MonoBehaviour
+public class VolumeSettings : MonoBehaviour
 {
+    public static VolumeSettings Instance;
+
     public AudioMixer audioMixer;
     public Slider musicSlider;
     public Slider sfxSlider;
 
-    [SerializeField] private GameObject _overlayMenu;
-    [SerializeField] private GameObject _overlayMenuButton;
-
-
-    public void Open()
+    private void Awake()
     {
-        _overlayMenu.SetActive(true);
-        _overlayMenuButton.SetActive(false);
-    }
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-    public void Close()
-    {
-        _overlayMenu.SetActive(false);
-        _overlayMenuButton.SetActive(true);
-        SaveVolume();
+        Instance = this;
     }
-    public void MainMenu()
-    {
-        SceneSwitch.Instance.ScenenChanger("MainMenu");
-        MusicManager.Instance.PlayMusic("MainMenu", 0.5f);
-        SaveVolume();
-    }
-
     public void UpdateMusicVolume(float volume)
     {
         audioMixer.SetFloat("MusicVolume", volume);

@@ -1006,7 +1006,7 @@ PrefabInstance:
     - target: {fileID: 249501340189666782, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 8304845761344847132}
+      objectReference: {fileID: 8304845761344847133}
     - target: {fileID: 249501340189666782, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -1017,7 +1017,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 249501340189666782, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: OverlayMenu, Assembly-CSharp
+      value: VolumeSettings, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 249501340189666782, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1246,7 +1246,7 @@ PrefabInstance:
     - target: {fileID: 7105832996690360376, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 8304845761344847132}
+      objectReference: {fileID: 8304845761344847133}
     - target: {fileID: 7105832996690360376, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -1257,7 +1257,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7105832996690360376, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: OverlayMenu, Assembly-CSharp
+      value: VolumeSettings, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7105832996690360376, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1277,6 +1277,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 939155529284174859, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8304845761344847132}
+    - targetCorrespondingSourceObject: {fileID: 939155529284174859, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8304845761344847133}
     - targetCorrespondingSourceObject: {fileID: 1101294290422611257, guid: f0f45de2b63ac8b4883133fb588ae3f1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8304845761344847128}
@@ -1327,11 +1330,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 760e5bb100d8798459fed90229b60a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  _overlayMenu: {fileID: 8304845761344847131}
+  _overlayMenuButton: {fileID: 8304845761344847130}
+--- !u!114 &8304845761344847133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8304845761344847129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e4fa698c6594de4584506bd1a9c4a84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VolumeSettings
   audioMixer: {fileID: 24100000, guid: 9af1849bc3908df4c96078eb47fc8c3f, type: 2}
   musicSlider: {fileID: 933595380}
   sfxSlider: {fileID: 933595379}
-  _overlayMenu: {fileID: 8304845761344847131}
-  _overlayMenuButton: {fileID: 8304845761344847130}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
