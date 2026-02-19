@@ -43,7 +43,6 @@ public class InteractableSystem : MonoBehaviour
 
         if (_selected != null && Input.GetMouseButtonUp(0))
         {
-            Debug.Log($"Released: {_selected.gameObject.name}", _selected.gameObject);
             _selected.OnPointerReleased();
             _settling = _selected;
             Deselect();

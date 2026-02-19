@@ -48,7 +48,6 @@ public class SlideInteractable : Interactable
     {
         if (_hasTarget)
         {
-            // Snap to target on release
             transform.position = _targetPosition;
             _hasTarget = false;
         }
@@ -79,6 +78,15 @@ public class SlideInteractable : Interactable
                 _hasTarget = false;
                 Transition(InteractableStates.Idle);
             }
+        }
+        else if(state == InteractableStates.Idle && !_hasTarget)
+        {
+            Vector3 worldAxis = transform.TransformDirection(_movementAxis.normalized);
+            float projectedDistance = Vector3.Dot(_targetPosition - _startPosition, worldAxis);
+            float snappedDistance = Mathf.Round(projectedDistance);
+            _targetPosition = _startPosition + worldAxis * snappedDistance;
+
+            transform.DOMove(_targetPosition, 0.1f).SetEase(Ease.OutExpo);
         }
     }
 }
