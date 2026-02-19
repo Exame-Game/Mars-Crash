@@ -6,6 +6,7 @@ public struct SoundEffect
     public string groupID;
     public AudioClip[] clips;
 }
+
 public class SoundLibrary : MonoBehaviour
 {
     [SerializeField] private SoundEffect[] soundEffects;
