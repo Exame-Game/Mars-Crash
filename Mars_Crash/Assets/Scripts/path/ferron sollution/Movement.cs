@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private GameObject _playerPrefab;
-    [SerializeField] private float _overlapTolerance;
-    [SerializeField] private float _moveSpeed = 3f;
+    [SerializeField] private UnityEvent _onSplit;
+    [SerializeField] private UnityEvent _onMerge;
+    
+    [SerializeField] private GameObject _otherPlayer;
+    [SerializeField] private int _playerIndex;
+    [SerializeField] private float _moveSpeed;
     
     private Camera _camera;
     
@@ -18,12 +22,27 @@ public class Movement : MonoBehaviour
     private HashSet<Node> _visited = new HashSet<Node>();
     private Dictionary<Node, Node> _cameFrom = new Dictionary<Node, Node>();
     
+    public Node _currentNode;
     private Coroutine _movementRoutine;
-    private Node _currentNode;
 
-    #endregion
+    private bool _inControl;
+    private bool _isSplit;
     
-    void Update()
+    #endregion
+
+    private void OnEnable()
+    {
+        _currentNode = transform.parent.GetComponent<Node>();
+
+        _currentNode.Occupied = true;
+        
+        _inControl = false;
+        
+        if (_playerIndex == 1)
+            _isSplit = true;
+    }
+
+    private void Update()
     {
         PointClickMovement();
     }
@@ -31,7 +50,6 @@ public class Movement : MonoBehaviour
     private void Start()
     {
         _camera = Camera.main;
-        RebuildGraph();
     }
 
     private List<Node> FindPath(Node startNode, Node targetNode)
@@ -43,6 +61,9 @@ public class Movement : MonoBehaviour
             return null;
         
         if (startNode.transform.up != targetNode.transform.up)
+            return null;
+        
+        if (targetNode.Occupied)
             return null;
 
         _queue.Clear();
@@ -58,7 +79,7 @@ public class Movement : MonoBehaviour
 
             foreach (Node neighbor in current.ConnectedNodes)
             {
-                if (neighbor == null || _visited.Contains(neighbor))
+                if (neighbor == null || _visited.Contains(neighbor) || neighbor.Occupied)
                     continue;
 
                 _visited.Add(neighbor);
@@ -90,11 +111,6 @@ public class Movement : MonoBehaviour
         path.Reverse();
         return path;
     }
-    
-    private Vector3 Positive(Vector3 v)
-    {
-        return new Vector3(math.abs(v.x), math.abs(v.y), math.abs(v.z));
-    }
 
     private Vector3 Flatten(Vector3 worldPos)
     {
@@ -103,20 +119,55 @@ public class Movement : MonoBehaviour
         var toPoint = worldPos - camPos;
         return worldPos - Vector3.Dot(toPoint, camForward) * camForward;
     }
-    
-    private bool IsWalkable(Node n)
+
+    public void SwitchInControl()
     {
-        if (n == null) 
-            return false;
+        if(!_isSplit) 
+            return;
         
-        if (!n.gameObject.activeInHierarchy) 
-            return false;
+        _inControl = !_inControl;
+    }
+
+    public void Split()
+    {
+        if (_playerIndex != 0 || _isSplit) 
+            return;
         
-        return true;
+        if (_currentNode.ConnectedNodes.Count <= 0) 
+            return;
+        
+        _otherPlayer.transform.parent = _currentNode.ConnectedNodes[0].transform;
+        _otherPlayer.transform.localPosition = Vector3.zero;
+        _otherPlayer.transform.localRotation = Quaternion.identity;
+        _otherPlayer.SetActive(true);
+        _onSplit.Invoke();
+        _isSplit = true;
+        _inControl = true;
+    }
+
+    public void Merge()
+    {
+        bool canMerge = false;
+        for (int i = 0; i < _currentNode.ConnectedNodes.Count; i++)
+        {
+            if (_currentNode.ConnectedNodes[i].Occupied)
+            {
+                canMerge = true;
+                break;
+            }
+        }
+        if (!canMerge)
+            return;
+        _otherPlayer.SetActive(false); 
+        _inControl = true;
+        _isSplit = false;
     }
 
     private void PointClickMovement()
     {
+        if (_isSplit && !_inControl)
+            return;
+        
         Vector3 inputPosition;
 
         // Desktop
@@ -143,53 +194,6 @@ public class Movement : MonoBehaviour
 
         if (nodes != null)
             StartCoroutine(MoveAlongPath(nodes));
-    }
-    
-    private void RebuildGraph()
-    {
-        var nodes = FindObjectsByType<Node>(FindObjectsSortMode.None);
-        
-        foreach (Node n in nodes)
-            n.ConnectedNodes.Clear();
-
-        foreach (Node a in nodes)
-        {
-            if (!IsWalkable(a)) continue;
-            Vector3 flatA = Flatten(a.transform.position);
-
-            foreach (Node b in nodes)
-            {
-                if (a == b || !IsWalkable(b)) 
-                    continue;
-                
-                if (a.transform.up != b.transform.up) 
-                    continue;
-
-                if (a.ConectionBlackList.Contains(b) || b.ConectionBlackList.Contains(a)) 
-                    continue;
-
-                Vector3 flatB = Flatten(b.transform.position);
-                // Vector3 delta = b.transform.position - a.transform.position;
-
-                Vector3 flatDelta = flatB - flatA;
-                
-                float planarDistance = flatDelta.magnitude;
-                
-                if (planarDistance > _overlapTolerance) 
-                    continue;
-                
-                Vector3 alignmentCheck = Positive(flatDelta);
-                
-                alignmentCheck.x = Mathf.Round(alignmentCheck.x);
-                alignmentCheck.z = Mathf.Round(alignmentCheck.z);
-                alignmentCheck.y = Mathf.Round(alignmentCheck.y);
-                
-                if (alignmentCheck == Positive(a.transform.up)) 
-                    continue;
-                
-                a.ConnectedNodes.Add(b);
-            }
-        }
     }
     
     private IEnumerator MoveAlongPath(List<Node> path)
@@ -248,7 +252,7 @@ public class Movement : MonoBehaviour
                 yield return null;
             }
             transform.position = targetPosition.position;
-
+            
             _currentNode = nextNode;
 
             transform.SetParent(_currentNode.transform);
