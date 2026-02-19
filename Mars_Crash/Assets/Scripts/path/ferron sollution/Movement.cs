@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
     private HashSet<Node> _visited = new HashSet<Node>();
     private Dictionary<Node, Node> _cameFrom = new Dictionary<Node, Node>();
     
-    public Node _currentNode;
+    public Node CurrentNode;
     private Coroutine _movementRoutine;
 
     private bool _inControl;
@@ -32,9 +32,9 @@ public class Movement : MonoBehaviour
 
     private void OnEnable()
     {
-        _currentNode = transform.parent.GetComponent<Node>();
+        CurrentNode = transform.parent.GetComponent<Node>();
 
-        _currentNode.Occupied = true;
+        CurrentNode.Occupied = true;
         
         _inControl = false;
         
@@ -133,10 +133,10 @@ public class Movement : MonoBehaviour
         if (_playerIndex != 0 || _isSplit) 
             return;
         
-        if (_currentNode.ConnectedNodes.Count <= 0) 
+        if (CurrentNode.ConnectedNodes.Count <= 0) 
             return;
         
-        _otherPlayer.transform.parent = _currentNode.ConnectedNodes[0].transform;
+        _otherPlayer.transform.parent = CurrentNode.ConnectedNodes[0].transform;
         _otherPlayer.transform.localPosition = Vector3.zero;
         _otherPlayer.transform.localRotation = Quaternion.identity;
         _otherPlayer.SetActive(true);
@@ -148,9 +148,9 @@ public class Movement : MonoBehaviour
     public void Merge()
     {
         bool canMerge = false;
-        for (int i = 0; i < _currentNode.ConnectedNodes.Count; i++)
+        for (int i = 0; i < CurrentNode.ConnectedNodes.Count; i++)
         {
-            if (_currentNode.ConnectedNodes[i].Occupied)
+            if (CurrentNode.ConnectedNodes[i].Occupied)
             {
                 canMerge = true;
                 break;
@@ -158,7 +158,14 @@ public class Movement : MonoBehaviour
         }
         if (!canMerge)
             return;
+        
+        Movement otherPlayerMovement = _otherPlayer.GetComponent<Movement>();
+        
+        otherPlayerMovement.CurrentNode.Occupied = false;
+        otherPlayerMovement.CurrentNode = null;
+        
         _otherPlayer.SetActive(false); 
+        
         _inControl = true;
         _isSplit = false;
     }
@@ -198,22 +205,22 @@ public class Movement : MonoBehaviour
     
     private IEnumerator MoveAlongPath(List<Node> path)
     {
-        _currentNode = path[0];
+        CurrentNode = path[0];
         
-        transform.SetParent(_currentNode.transform);
-        transform.position = _currentNode.transform.position;
+        transform.SetParent(CurrentNode.transform);
+        transform.position = CurrentNode.transform.position;
 
         for (int i = 1; i < path.Count; i++)
         {
             Node nextNode = path[i];
             
-            if (!_currentNode.ConnectedNodes.Contains(nextNode))
+            if (!CurrentNode.ConnectedNodes.Contains(nextNode))
             {
                 _movementRoutine = null;
                 yield break;
             }
             
-            Vector3 headingA = _currentNode.transform.position - _camera.transform.position;
+            Vector3 headingA = CurrentNode.transform.position - _camera.transform.position;
             Vector3 headingB = nextNode.transform.position - _camera.transform.position;
             
             float distanceA = Vector3.Dot(headingA, _camera.transform.forward);
@@ -224,19 +231,19 @@ public class Movement : MonoBehaviour
             
             if (distanceA < distanceB)
             {
-                Vector3 direction = Flatten(nextNode.transform.position) - Flatten(_currentNode.transform.position);
-                endOffset = (_currentNode.transform.position + direction) - nextNode.transform.position;
+                Vector3 direction = Flatten(nextNode.transform.position) - Flatten(CurrentNode.transform.position);
+                endOffset = (CurrentNode.transform.position + direction) - nextNode.transform.position;
             }
             else
             {
-                Vector3 direction = Flatten(_currentNode.transform.position) - Flatten(nextNode.transform.position);
-                startOffset = (nextNode.transform.position + direction) - _currentNode.transform.position;
+                Vector3 direction = Flatten(CurrentNode.transform.position) - Flatten(nextNode.transform.position);
+                startOffset = (nextNode.transform.position + direction) - CurrentNode.transform.position;
             }
             
-            _currentNode.Occupied = false;
+            CurrentNode.Occupied = false;
             nextNode.Occupied = true;
 
-            Transform startPosition = _currentNode.transform;
+            Transform startPosition = CurrentNode.transform;
             Transform targetPosition = nextNode.transform;
             
             
@@ -253,9 +260,9 @@ public class Movement : MonoBehaviour
             }
             transform.position = targetPosition.position;
             
-            _currentNode = nextNode;
+            CurrentNode = nextNode;
 
-            transform.SetParent(_currentNode.transform);
+            transform.SetParent(CurrentNode.transform);
         }
         _movementRoutine = null;
     }
