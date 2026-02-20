@@ -1,12 +1,15 @@
 using DG.Tweening;
 using UnityEngine;
-
+using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 public class HandleInteractable : Interactable
 {
+    public UnityEvent OnStartMoving;
+    public UnityEvent OnStopMoving;
+
     [Header("Rotation Settings")]
     [SerializeField] private Transform _rotationAnchor;
     [SerializeField] private Vector3 _rotationAxis = Vector3.up;
@@ -49,11 +52,13 @@ public class HandleInteractable : Interactable
         _currentRotation = 0f;
     }
 
-
     public override void OnPointerDown(Vector3 worldHitPoint)
     {
-        if (_isLocked) 
+
+        if (_isLocked)
             return;
+
+        OnStartMoving?.Invoke();
 
         _isDragging = true;
         _hasValidPointer = false;
@@ -94,6 +99,8 @@ public class HandleInteractable : Interactable
     {
         if (_isLocked) 
             return;
+
+        OnStopMoving?.Invoke();
 
         _isDragging = false;
         _hasValidPointer = false;
@@ -176,9 +183,7 @@ public class HandleInteractable : Interactable
                 DOTween.Pause("grab");
             }
             else
-            {
                 DOTween.PlayBackwards("lock");
-            }
     }
 
     private void ApplyRotation()
@@ -196,7 +201,6 @@ public class HandleInteractable : Interactable
 
         Vector3 rotatedDirection = rotation * baseDirection;
         Vector3 newPosition = _rotationAnchor.position + rotatedDirection * distance;
-
 
         transform.position = newPosition;
 
