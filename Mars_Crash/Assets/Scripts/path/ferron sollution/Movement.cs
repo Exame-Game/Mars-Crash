@@ -62,9 +62,6 @@ public class Movement : MonoBehaviour
         
         if (startNode.transform.up != targetNode.transform.up)
             return null;
-        
-        if (targetNode.Occupied)
-            return null;
 
         _queue.Clear();
         _visited.Clear();
@@ -79,7 +76,7 @@ public class Movement : MonoBehaviour
 
             foreach (Node neighbor in current.ConnectedNodes)
             {
-                if (neighbor == null || _visited.Contains(neighbor) || neighbor.Occupied)
+                if (neighbor == null || _visited.Contains(neighbor))
                     continue;
 
                 _visited.Add(neighbor);
@@ -214,7 +211,7 @@ public class Movement : MonoBehaviour
         {
             Node nextNode = path[i];
             
-            if (!CurrentNode.ConnectedNodes.Contains(nextNode))
+            if (!CurrentNode.ConnectedNodes.Contains(nextNode) || nextNode.Occupied)
             {
                 _movementRoutine = null;
                 yield break;
