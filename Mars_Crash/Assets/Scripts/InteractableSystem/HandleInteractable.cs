@@ -43,18 +43,11 @@ public class HandleInteractable : Interactable
     {
         base.Start();
 
-        if (_rotationAnchor == null)
-        {
-            Debug.LogWarning($"No rotation anchor set for {gameObject.name}. Using self as anchor.");
-            _rotationAnchor = transform;
-        }
-
-        _currentRotation = 0f;
+        SetRotationAnchor();
     }
 
     public override void OnPointerDown(Vector3 worldHitPoint)
     {
-
         if (_isLocked)
             return;
 
@@ -64,7 +57,6 @@ public class HandleInteractable : Interactable
         _hasValidPointer = false;
         _isFirstDragFrame = true;
 
-        // Capture reference direction ONCE when drag begins
         Vector3 worldAxis = _rotationAxis.normalized;
         _initialForward = Vector3.ProjectOnPlane(transform.forward, worldAxis);
         if (_initialForward.sqrMagnitude < 0.0001f)
@@ -105,7 +97,6 @@ public class HandleInteractable : Interactable
         _isDragging = false;
         _hasValidPointer = false;
 
-        // Just set the target, let OnUpdateState handle the actual movement
         if (_snapToAngles)
             _targetRotation = Mathf.Round(_currentRotation / _snapAngleIncrement) * _snapAngleIncrement;
         else
@@ -129,7 +120,6 @@ public class HandleInteractable : Interactable
     {
         if (state == InteractableStates.Moving && _hasValidPointer)
         {
-            //Debug.Log("Moving & Pointer correct");
             Vector3 worldAxis = _rotationAnchor.TransformDirection(_rotationAxis).normalized;
             Vector3 fromAnchorToPointer = _currentPointerPosition - _rotationAnchor.position;
             fromAnchorToPointer = Vector3.ProjectOnPlane(fromAnchorToPointer, worldAxis);
@@ -184,6 +174,17 @@ public class HandleInteractable : Interactable
             }
             else
                 DOTween.PlayBackwards("lock");
+    }
+    
+    private void SetRotationAnchor()
+    {
+        if (_rotationAnchor == null)
+        {
+            Debug.LogWarning($"No rotation anchor set for {gameObject.name}. Using self as anchor.");
+            _rotationAnchor = transform;
+        }
+
+        _currentRotation = 0f;
     }
 
     private void ApplyRotation()

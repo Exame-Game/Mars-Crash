@@ -6,7 +6,7 @@ public class InteractableSystem : MonoBehaviour
 
     private Camera _mainCam;
     private Interactable _selected;
-    private Interactable _settling; // runs StateUpdate after deselect
+    private Interactable _settling;
 
     private void Awake()
     {
@@ -18,12 +18,12 @@ public class InteractableSystem : MonoBehaviour
         HandlePointer();
         _selected?.StateUpdate();
 
-        if (_settling != null && _settling != _selected)
-        {
-            _settling.StateUpdate();
-            if (_settling._currentState == InteractableStates.Idle)
-                _settling = null;
-        }
+        if (_settling == null || _settling == _selected)
+            return;
+
+        _settling.StateUpdate();
+        if (_settling._currentState == InteractableStates.Idle)
+            _settling = null;
     }
 
     private void HandlePointer()
