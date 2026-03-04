@@ -16,17 +16,34 @@ public class MaterialAssigner : MonoBehaviour
         ApplyMaterial();
     }
 
-    private void ApplyMaterial()
+    public void ApplyMaterial()
     {
-        if (_material == null) return;
+        if (_material == null) 
+            return;
 
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
 
         foreach (Renderer renderer in renderers)
-        { if (renderer.transform.parent.CompareTag("Player"))
+        { 
+            if (renderer.transform.parent.CompareTag("Player"))
                 continue;
 
             renderer.sharedMaterial = _material;
+        }
+    }
+    public void ApplyMaterial(Material mat = null)
+    {
+        if (_material == null) 
+            return;
+
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+
+        foreach (Renderer renderer in renderers)
+        {
+            if (renderer.transform.parent.CompareTag("Player"))
+                continue;
+
+            renderer.sharedMaterial = mat;
         }
     }
 }
