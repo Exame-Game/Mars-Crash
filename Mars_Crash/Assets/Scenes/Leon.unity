@@ -246,6 +246,71 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1001 &539748712
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -244.83502
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -219.83691
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: m_Name
+      value: tong monster animatie 05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7205140776170859923, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 481c0e5e59adc014bb1616b14df74222, type: 2}
+    - target: {fileID: 7603786706384944740, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 55eeee57b03bc7a4bbcf3857c3b74d2f, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c32219bf6ac2e434289a954538356ce2, type: 3}
 --- !u!1 &552059931
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,75 +403,10 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &985461468
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.74059
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.85933
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: m_Name
-      value: tong monster animatie
-      objectReference: {fileID: 0}
-    - target: {fileID: 7205140776170859923, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 481c0e5e59adc014bb1616b14df74222, type: 2}
-    - target: {fileID: 7603786706384944740, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 55eeee57b03bc7a4bbcf3857c3b74d2f, type: 2}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1b9fc077be2953640b7f158f9ca13b01, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 552059934}
   - {fileID: 391569801}
-  - {fileID: 985461468}
+  - {fileID: 539748712}
