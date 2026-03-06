@@ -8,11 +8,11 @@ public class VolumeSettings : MonoBehaviour
     public Slider musicSlider;
     public Slider sfxSlider;
 
-
-    void Awake()
+    private void Awake()
     {
         SaveVolume();
     }
+
     public void UpdateMusicVolume(float volume)
     {
         audioMixer.SetFloat("MusicVolume", DecibelToVolume(volume));
@@ -31,11 +31,13 @@ public class VolumeSettings : MonoBehaviour
         audioMixer.GetFloat("SFXVolume", out float sfxVolume);
         PlayerPrefs.SetFloat("SFXVolume", VolumeToDecibel(sfxVolume));
     }
+
     public void LoadVolume()
     {
         musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
     }
+    
     public float DecibelToVolume(float volume)
     {
         float decibelVolume = Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20f;

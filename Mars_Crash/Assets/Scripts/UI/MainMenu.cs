@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject _settingsMenu;
     [SerializeField] private GameObject _ufo;
 
-    void Start()
+    private void Start()
     {
         _volumeSettings.LoadVolume();
         MusicManager.Instance.PlayMusic("MainMenu");
