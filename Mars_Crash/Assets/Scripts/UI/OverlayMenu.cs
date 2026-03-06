@@ -9,6 +9,7 @@ public class OverlayMenu : MonoBehaviour
 
     public void Open()
     {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
         _overlayMenu.SetActive(true);
         _overlayMenuButton.SetActive(false);
         _volumeSettings.LoadVolume();
@@ -16,19 +17,16 @@ public class OverlayMenu : MonoBehaviour
 
     public void Close()
     {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
         _overlayMenu.SetActive(false);
         _overlayMenuButton.SetActive(true);
         _volumeSettings.SaveVolume();
     }
     public void MainMenu()
     {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
         SceneSwitch.Instance.SceneChanger("MainMenu");
         MusicManager.Instance.PlayMusic("MainMenu", 0.5f);
         _volumeSettings.SaveVolume();
-    }
-
-    public void TestSFX()
-    {
-        SoundManager.Instance.PlaySound2D("ButtonClick");
     }
 }

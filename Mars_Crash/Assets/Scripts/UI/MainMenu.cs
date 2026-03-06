@@ -15,12 +15,14 @@ public class MainMenu : MonoBehaviour
 
     public void Play()
     {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
         SceneSwitch.Instance.SceneChanger("FirstLevel");
         MusicManager.Instance.PlayMusic("FirstLevel", 0.5f);
     }
 
     public void OpenSettings()
     {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
         _mainMenu.SetActive(false);
         _ufo.SetActive(false);
         _settingsMenu.SetActive(true);
@@ -29,6 +31,7 @@ public class MainMenu : MonoBehaviour
 
     public void SaveAudioSettings()
     {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
         _settingsMenu.SetActive(false);
         _mainMenu.SetActive(true);
         _ufo.SetActive(true);
