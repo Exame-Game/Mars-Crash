@@ -5,6 +5,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private VolumeSettings _volumeSettings;
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private GameObject _settingsMenu;
+    [SerializeField] private GameObject _ufo;
 
     void Start()
     {
@@ -21,14 +22,16 @@ public class MainMenu : MonoBehaviour
     public void OpenSettings()
     {
         _mainMenu.SetActive(false);
+        _ufo.SetActive(false);
         _settingsMenu.SetActive(true);
         _volumeSettings.LoadVolume();
     }
 
     public void SaveAudioSettings()
     {
-        _mainMenu.SetActive(true);
         _settingsMenu.SetActive(false);
+        _mainMenu.SetActive(true);
+        _ufo.SetActive(true);
         _volumeSettings.SaveVolume();
     }
 }

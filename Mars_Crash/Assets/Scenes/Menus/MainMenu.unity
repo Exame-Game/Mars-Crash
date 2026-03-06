@@ -1467,6 +1467,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 875859110}
   m_CullTransparentMesh: 1
+--- !u!1 &1164875452 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2323839766960018575, guid: 8b36d19e876d46746a035dfe9fb2e70e, type: 3}
+  m_PrefabInstance: {fileID: 160077694}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1177975901
 GameObject:
   m_ObjectHideFlags: 0
@@ -2149,6 +2154,7 @@ MonoBehaviour:
   _volumeSettings: {fileID: 1869729682}
   _mainMenu: {fileID: 1822934007}
   _settingsMenu: {fileID: 1177975901}
+  _ufo: {fileID: 1164875452}
 --- !u!114 &1869729682
 MonoBehaviour:
   m_ObjectHideFlags: 0
