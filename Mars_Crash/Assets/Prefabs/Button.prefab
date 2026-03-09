@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2571157750127352516
+--- !u!1001 &4227831345476766117
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,27 +10,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e59da00e0585a3d43acbf9a7ffbe1060, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e59da00e0585a3d43acbf9a7ffbe1060, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e59da00e0585a3d43acbf9a7ffbe1060, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e59da00e0585a3d43acbf9a7ffbe1060, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.82291
+      value: -6.551198
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e59da00e0585a3d43acbf9a7ffbe1060, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -9.201788
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e59da00e0585a3d43acbf9a7ffbe1060, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.82291
+      value: 10.981774
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e59da00e0585a3d43acbf9a7ffbe1060, type: 3}
       propertyPath: m_LocalRotation.w
@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: cc9e036b680149245b0876e371cb0ff2, type: 2}
     - target: {fileID: 919132149155446097, guid: e59da00e0585a3d43acbf9a7ffbe1060, type: 3}
       propertyPath: m_Name
-      value: Knop 1
+      value: Button
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
