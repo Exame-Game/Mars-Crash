@@ -16,7 +16,7 @@ public class MainMenu : MonoBehaviour
     public void Play()
     {
         SoundManager.Instance.PlaySound2D("ButtonClick");
-        SceneSwitch.Instance.SceneChanger("FirstLevel");
+        SceneSwitchManager.Instance.SwitchScene("FirstLevel");
         MusicManager.Instance.PlayMusic("FirstLevel", 0.5f);
     }
 

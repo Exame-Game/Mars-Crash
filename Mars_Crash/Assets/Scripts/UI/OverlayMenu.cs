@@ -6,7 +6,6 @@ public class OverlayMenu : MonoBehaviour
     [SerializeField] private GameObject _overlayMenu;
     [SerializeField] private GameObject _overlayMenuButton;
 
-
     public void Open()
     {
         SoundManager.Instance.PlaySound2D("ButtonClick");
@@ -22,10 +21,11 @@ public class OverlayMenu : MonoBehaviour
         _overlayMenuButton.SetActive(true);
         _volumeSettings.SaveVolume();
     }
+
     public void MainMenu()
     {
         SoundManager.Instance.PlaySound2D("ButtonClick");
-        SceneSwitch.Instance.SceneChanger("MainMenu");
+        SceneSwitchManager.Instance.SwitchScene("MainMenu");
         MusicManager.Instance.PlayMusic("MainMenu", 0.5f);
         _volumeSettings.SaveVolume();
     }
