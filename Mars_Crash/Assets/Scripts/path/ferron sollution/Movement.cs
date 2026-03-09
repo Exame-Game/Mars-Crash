@@ -45,7 +45,7 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        PointClickMovement();
+        if (_movementRoutine == null) PointClickMovement();
     }
 
     private void Start()
