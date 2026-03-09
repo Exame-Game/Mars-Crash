@@ -9,12 +9,14 @@ public class NodeButton : Node
     public void Press()
     {
         IsPressed = true;
+        Occupied = true;
         OnPressed?.Invoke();
     }
 
     public void Release()
     {
         IsPressed = false;
+        Occupied = false;
         OnReleased?.Invoke();
     }
 }
