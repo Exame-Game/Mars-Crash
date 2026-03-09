@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance;
-
     [SerializeField] private MusicLibrary musicLibrary;
     [SerializeField] private AudioSource musicSource;
 
