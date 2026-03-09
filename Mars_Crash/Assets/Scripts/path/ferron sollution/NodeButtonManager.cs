@@ -6,9 +6,14 @@ using UnityEngine;
 public class NodeButtonManager : MonoBehaviour
 {
     [SerializeField] private List<NodeButton> buttons;
+
     [SerializeField] private float _buttonOffset = 0.395f;
-    [SerializeField] private DOTweenAnimation _buttonTween;
+    [SerializeField] private float _pressScale = 0.6f;
+    [SerializeField] private float _pressDuration = 0.3f;
+
     public GameObject buttonPrefab;
+
+    private Dictionary<NodeButton, Transform> _buttonTransforms = new Dictionary<NodeButton, Transform>();
 
     private void Awake()
     {
@@ -16,6 +21,11 @@ public class NodeButtonManager : MonoBehaviour
     }
 
     private void Update()
+    {
+        UpdateButtonPressed();
+    }
+
+    private void UpdateButtonPressed()
     {
         foreach (NodeButton button in buttons)
         {
@@ -29,25 +39,11 @@ public class NodeButtonManager : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        foreach (NodeButton button in buttons)
-        {
-            button.OnPressed -= () => OnButtonPressed(button);
-            button.OnReleased -= () => OnButtonReleased(button);
-        }
-    }
-
-    public void SpawnButton(GameObject buttonPrefab, Transform targetTransform, Quaternion rotation)
+    public void SpawnButton(GameObject buttonPrefab, Transform targetTransform, Quaternion rotation, NodeButton nodeButton)
     {
         Vector3 spawnPosition = targetTransform.position + (rotation * Vector3.up) * _buttonOffset;
-        GameObject spawnedButton = Instantiate(buttonPrefab, spawnPosition, rotation, transform);
-
-        if (_buttonTween != null)
-        {
-            DOTweenAnimation anim = spawnedButton.GetComponent<DOTweenAnimation>();
-            if (anim != null) anim.DORestart();
-        }
+        GameObject spawnedButton = Instantiate(buttonPrefab, spawnPosition, rotation, targetTransform);
+        _buttonTransforms[nodeButton] = spawnedButton.transform;
     }
 
     private void Initialize()
@@ -55,7 +51,7 @@ public class NodeButtonManager : MonoBehaviour
         buttons = GetComponentsInChildren<NodeButton>().ToList();
         foreach (NodeButton button in buttons)
         {
-            SpawnButton(buttonPrefab, button.transform, GetNodeRotation(button));
+            SpawnButton(buttonPrefab, button.transform, GetNodeRotation(button), button);
             button.OnPressed += () => OnButtonPressed(button);
             button.OnReleased += () => OnButtonReleased(button);
         }
@@ -68,26 +64,19 @@ public class NodeButtonManager : MonoBehaviour
 
     private void OnButtonPressed(NodeButton button)
     {
-        button.IsPressed = true;
         Debug.Log($"Button pressed: {button.name}");
-        DOTweenAnimation anim = GetButtonObject(button);
-        if (anim != null) anim.DOPlay();
+        if (!_buttonTransforms.TryGetValue(button, out Transform t)) return;
+
+        t.DOKill();
+        t.DOPunchScale(Vector3.one * -_pressScale, _pressDuration, vibrato: 5, elasticity: 0.5f);
     }
 
     private void OnButtonReleased(NodeButton button)
     {
-        button.IsPressed = false;
-        DOTweenAnimation anim = GetButtonObject(button);
-        if (anim != null) anim.DOPlayBackwards();
-    }
+        Debug.Log($"Button released: {button.name}");
+        if (!_buttonTransforms.TryGetValue(button, out Transform t)) return;
 
-    private DOTweenAnimation GetButtonObject(NodeButton button)
-    {
-        // Find the spawned button near this node's position
-        foreach (Transform child in transform)
-            if (Vector3.Distance(child.position, button.transform.position) < 1f)
-                return child.GetComponent<DOTweenAnimation>();
-
-        return null;
+        t.DOKill();
+        t.DOScale(Vector3.one, _pressDuration * 0.5f).SetEase(Ease.OutBack);
     }
 }
