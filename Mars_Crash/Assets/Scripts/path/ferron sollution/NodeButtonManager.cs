@@ -7,7 +7,7 @@ public class NodeButtonManager : MonoBehaviour
 {
     [SerializeField] private List<NodeButton> buttons;
 
-    [SerializeField] private float _buttonOffset = 0.395f;
+    [SerializeField] private float _buttonOffset = 0.605f;
     [SerializeField] private float _pressScale = 0.6f;
     [SerializeField] private float _pressDuration = 0.3f;
 
