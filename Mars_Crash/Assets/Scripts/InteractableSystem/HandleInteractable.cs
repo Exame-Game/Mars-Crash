@@ -91,9 +91,7 @@ public class HandleInteractable : Interactable
     {
         if (_isLocked) 
             return;
-
-        OnStopMoving?.Invoke();
-
+        
         _isDragging = false;
         _hasValidPointer = false;
 
@@ -106,6 +104,8 @@ public class HandleInteractable : Interactable
             DOTween.Restart("grab");
 
         Transition(InteractableStates.Idle);
+
+        OnStopMoving?.Invoke();
     }
 
     protected override void OnEnterState(InteractableStates state)

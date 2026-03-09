@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
 
     [SerializeField] private UnityEvent _onSplit;
     [SerializeField] private UnityEvent _onMerge;
+    [SerializeField] private UnityEvent _onStartMove;
     
     [SerializeField] private GameObject _otherPlayer;
     [SerializeField] private int _playerIndex;
@@ -54,6 +55,8 @@ public class Movement : MonoBehaviour
 
     private List<Node> FindPath(Node startNode, Node targetNode)
     {
+        _onStartMove.Invoke();
+        
         if (startNode == null || targetNode == null)
             return null;
 
@@ -211,6 +214,7 @@ public class Movement : MonoBehaviour
         {
             Node nextNode = path[i];
             
+            _onStartMove.Invoke();
             if (!CurrentNode.ConnectedNodes.Contains(nextNode) || nextNode.Occupied)
             {
                 _movementRoutine = null;
