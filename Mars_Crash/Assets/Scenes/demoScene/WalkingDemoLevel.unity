@@ -1780,7 +1780,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NodeButtonManager
   buttons: []
   _buttonOffset: 0.605
-  _buttonTween: {fileID: 0}
+  _pressScale: 0.6
+  _pressDuration: 0.3
   buttonPrefab: {fileID: 3921843509114090740, guid: a479d85be8b064e4cb5de72da858d84b, type: 3}
 --- !u!1 &609200755
 GameObject:
