@@ -200,7 +200,7 @@ public class Movement : MonoBehaviour
         List<Node> nodes = FindPath(transform.parent.GetComponent<Node>(), targetNode);
 
         if (nodes != null)
-            StartCoroutine(MoveAlongPath(nodes));
+            _movementRoutine = StartCoroutine(MoveAlongPath(nodes));
     }
     
     private IEnumerator MoveAlongPath(List<Node> path)
