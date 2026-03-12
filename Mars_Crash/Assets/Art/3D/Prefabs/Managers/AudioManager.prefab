@@ -182,6 +182,24 @@ MonoBehaviour:
   - groupID: ButtonClick
     clips:
     - {fileID: 8300000, guid: 81b4cb502324acd4bb509cfac7227a22, type: 3}
+  - groupID: CloseDoor
+    clips:
+    - {fileID: 8300000, guid: 6c079c9c0aaa5ce45bef7da788667771, type: 3}
+  - groupID: Merge
+    clips:
+    - {fileID: 8300000, guid: 7b1f1c5afd3842b4181693cf84ad9105, type: 3}
+  - groupID: Split
+    clips:
+    - {fileID: 8300000, guid: 0692d3f5669bd1544816a0e0a7407fae, type: 3}
+  - groupID: Tong
+    clips:
+    - {fileID: 8300000, guid: 5271cc3e1b5ac604aabf3edb57f33b8a, type: 3}
+  - groupID: WheelSpin
+    clips:
+    - {fileID: 8300000, guid: d77bc2ee67848a042a7e3950fccc7376, type: 3}
+  - groupID: WheelClick
+    clips:
+    - {fileID: 8300000, guid: e19abb86bcb87714f95b17b38a6ececa, type: 3}
 --- !u!114 &3063204379767704022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,9 +228,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MusicLibrary
   musicTracks:
   - trackName: MainMenu
-    clip: {fileID: 8300000, guid: b9ec5922da5ac794ca54c37a7122c2b7, type: 3}
+    clip: {fileID: 8300000, guid: ca3a17baa479c7948b4759d11eb9b237, type: 3}
   - trackName: FirstLevel
-    clip: {fileID: 8300000, guid: ab11caba7d50be34a9edad580c395f76, type: 3}
+    clip: {fileID: 8300000, guid: 44a6ccb7122162d4d94b162635e44503, type: 3}
 --- !u!114 &1313581555015656627
 MonoBehaviour:
   m_ObjectHideFlags: 0
