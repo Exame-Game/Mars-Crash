@@ -41,6 +41,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8318935250212751033}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 831aac2753df04949b8f3f02ae0b50d4, type: 3}
+  m_Script: {fileID: 11500000, guid: 6998d8618ebe77844a8d998269164f0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneSwitch
