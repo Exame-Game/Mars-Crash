@@ -29,12 +29,12 @@ public class NodeButtonManager : MonoBehaviour
     {
         foreach (NodeButton button in buttons)
         {
-            Node pathNode = button.GetComponentInParent<Node>(true);
-            bool occupied = pathNode != null && pathNode != button && pathNode.Occupied;
+            // Node pathNode = button.GetComponentInParent<Node>(true);
+            // bool occupied = pathNode != null && pathNode != button && pathNode.Occupied;
 
-            if (occupied && !button.IsPressed)
+            if (button.Occupied && !button.IsPressed)
                 button.Press();
-            else if (!occupied && button.IsPressed)
+            else if (!button.Occupied && button.IsPressed)
                 button.Release();
         }
     }
