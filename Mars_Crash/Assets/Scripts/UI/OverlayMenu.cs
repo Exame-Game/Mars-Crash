@@ -42,8 +42,8 @@ public class OverlayMenu : MonoBehaviour
     public void CloseTutorial()
     {
         SoundManager.Instance.PlaySound2D("ButtonClick");
+        _overlayMenuButton.SetActive(true);
         _tutorialPanel.SetActive(false);
-        _overlayMenu.SetActive(true);
     }
 
     public void Endscreen()
