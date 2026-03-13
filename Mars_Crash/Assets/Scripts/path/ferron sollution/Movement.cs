@@ -101,7 +101,7 @@ public class Movement : MonoBehaviour
             }
         }
 
-        return null; // No path found
+        return null;
     }
 
     private List<Node> ReconstructPath(Node endNode)
@@ -123,9 +123,10 @@ public class Movement : MonoBehaviour
 
     private Vector3 Flatten(Vector3 worldPos)
     {
-        var camPos = _camera.transform.position;
-        var camForward = _camera.transform.forward;
-        var toPoint = worldPos - camPos;
+        Vector3 camPos = _camera.transform.position;
+        Vector3 camForward = _camera.transform.forward;
+        Vector3 toPoint = worldPos - camPos;
+
         return worldPos - Vector3.Dot(toPoint, camForward) * camForward;
     }
 
@@ -149,6 +150,7 @@ public class Movement : MonoBehaviour
         _otherPlayer.transform.localPosition = Vector3.zero;
         _otherPlayer.transform.localRotation = Quaternion.identity;
         _otherPlayer.SetActive(true);
+
         _onSplit.Invoke();
         _isSplit = true;
         _inControl = false;
@@ -160,13 +162,12 @@ public class Movement : MonoBehaviour
         _onMerge.Invoke();
         bool canMerge = false;
         for (int i = 0; i < CurrentNode.ConnectedNodes.Count; i++)
-        {
             if (CurrentNode.ConnectedNodes[i].Occupied)
             {
                 canMerge = true;
                 break;
             }
-        }
+
         if (!canMerge)
             return;
 
