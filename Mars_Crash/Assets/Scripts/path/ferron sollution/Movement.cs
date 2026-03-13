@@ -229,7 +229,6 @@ public class Movement : MonoBehaviour
     
     private IEnumerator MoveAlongPath(List<Node> path)
     {
-        Debug.Log("start");
         if (_mergeButton.enabled)
             _mergeButton.interactable = false;
         
@@ -239,9 +238,7 @@ public class Movement : MonoBehaviour
         transform.position = CurrentNode.transform.position;
 
         foreach (Animator animator in _animator)
-        {
             animator.SetTrigger("walk");
-        }
 
         for (int i = 1; i < path.Count; i++)
         {
@@ -319,13 +316,10 @@ public class Movement : MonoBehaviour
             {
                 RecalculatePath(_switchPathNode);
                 foreach (Animator animator in _animator)
-                {
                     animator.SetTrigger("idle");
-                }
                 yield break;
             }
         }
-        Debug.Log("done");
         foreach (Animator animator in _animator)
         {
             animator.SetTrigger("idle");
@@ -335,18 +329,15 @@ public class Movement : MonoBehaviour
         bool nextToOtherPlayer = false;
         
         foreach (Node node in CurrentNode.ConnectedNodes)
-        {
             if (node.Occupied)
             {
                 nextToOtherPlayer = true;
                 break;
             }
-        }
+        
 
         if (nextToOtherPlayer)
-        {
             if (_mergeButton.enabled)
                 _mergeButton.interactable = true;
-        }
     }
 }
