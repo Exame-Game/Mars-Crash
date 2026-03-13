@@ -143,7 +143,7 @@ public class Movement : MonoBehaviour
         _otherPlayer.SetActive(true);
         _onSplit.Invoke();
         _isSplit = true;
-        _inControl = true;
+        _otherPlayer.GetComponent<Movement>()._inControl = true;
     }
 
     public void Merge()
