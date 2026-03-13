@@ -29,9 +29,6 @@ public class NodeButtonManager : MonoBehaviour
     {
         foreach (NodeButton button in buttons)
         {
-            // Node pathNode = button.GetComponentInParent<Node>(true);
-            // bool occupied = pathNode != null && pathNode != button && pathNode.Occupied;
-
             if (button.Occupied && !button.IsPressed)
                 button.Press();
             else if (!button.Occupied && button.IsPressed)
