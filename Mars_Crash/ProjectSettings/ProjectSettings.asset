@@ -8,7 +8,7 @@ PlayerSettings:
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
-  defaultScreenOrientation: 0
+  defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
@@ -144,8 +144,7 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 0.1.0
-  preloadedAssets:
-  - {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -268,7 +267,7 @@ PlayerSettings:
   useCustomGradlePropertiesTemplate: 0
   useCustomGradleSettingsTemplate: 0
   useCustomProguardFile: 0
-  AndroidTargetArchitectures: 3
+  AndroidTargetArchitectures: 2
   AndroidAllowedArchitectures: -13
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
@@ -525,10 +524,7 @@ PlayerSettings:
       m_Height: 720
       m_Kind: 1
       m_SubKind: 
-  m_BuildTargetBatching:
-  - m_BuildTarget: Android
-    m_StaticBatching: 1
-    m_DynamicBatching: 0
+  m_BuildTargetBatching: []
   m_BuildTargetShaderSettings: []
   m_BuildTargetGraphicsJobs: []
   m_BuildTargetGraphicsJobMode: []
@@ -829,30 +825,11 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
-  scriptingDefineSymbols:
-    Android: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    EmbeddedLinux: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    GameCoreScarlett: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    GameCoreXboxOne: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    Kepler: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    LinuxHeadlessSimulation: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    Nintendo Switch: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    Nintendo Switch 2: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    PS4: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    PS5: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    QNX: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    Standalone: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    VisionOS: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    WebGL: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    Windows Store Apps: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    XboxOne: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    iPhone: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
-    tvOS: DOTWEEN;DOTWEEN_UITOOLKIT;DOTWEEN_TEXTMESHPRO
+  scriptingDefineSymbols: {}
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
-    Standalone: 0
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   il2cppStacktraceInformation: {}
@@ -945,7 +922,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 2
+  activeInputHandler: 1
   windowsGamepadBackendHint: 0
   cloudProjectId: 8f2b1461-d7aa-460f-adda-9751bad96e8c
   framebufferDepthMemorylessMode: 0
@@ -957,7 +934,7 @@ PlayerSettings:
   hmiLoadingImage: {fileID: 0}
   platformRequiresReadableAssets: 0
   virtualTexturingSupportEnabled: 0
-  insecureHttpOption: 1
+  insecureHttpOption: 0
   androidVulkanDenyFilterList: []
   androidVulkanAllowFilterList: []
   androidVulkanDeviceFilterListAsset: {fileID: 0}
