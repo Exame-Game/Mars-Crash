@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,28 +14,30 @@ public class Movement : MonoBehaviour
     [SerializeField] private UnityEvent _onSplit;
     [SerializeField] private UnityEvent _onMerge;
     [SerializeField] private UnityEvent _onStartMove;
+
     [SerializeField] private Animator[] _animator;
-    
+    [SerializeField] private Button _mergeButton;
     [SerializeField] private GameObject _otherPlayer;
+
+    [SerializeField] private GameObject _visualIndicator;
     [SerializeField] private int _playerIndex;
     [SerializeField] private float _moveSpeed;
-    
-    [SerializeField] private Button _mergeButton;
-    
+
+    public Node CurrentNode;
+    public bool _inControl;
+    public bool _isSplit;
+
     private Camera _camera;
 
-    private Node _switchPathNode;
-    
     private Queue<Node> _queue = new Queue<Node>(256);
     private HashSet<Node> _visited = new HashSet<Node>();
     private Dictionary<Node, Node> _cameFrom = new Dictionary<Node, Node>();
-    
-    public Node CurrentNode;
-    private Coroutine _movementRoutine;
 
-    public  bool _inControl;
-    public bool _isSplit;
-    
+    private Coroutine _movementRoutine;
+    private Node _switchPathNode;
+
+    private GameObject _currentVisual;
+
     #endregion
 
     private void OnEnable()
@@ -42,9 +45,9 @@ public class Movement : MonoBehaviour
         CurrentNode = transform.parent.GetComponent<Node>();
 
         CurrentNode.Occupied = true;
-        
+
         _inControl = false;
-        
+
         if (_playerIndex == 1)
             _isSplit = true;
     }
@@ -62,13 +65,13 @@ public class Movement : MonoBehaviour
     private List<Node> FindPath(Node startNode, Node targetNode)
     {
         _onStartMove.Invoke();
-        
+
         if (startNode == null || targetNode == null)
             return null;
 
         if (startNode == targetNode)
             return null;
-        
+
         if (startNode.transform.up != targetNode.transform.up)
             return null;
 
@@ -128,20 +131,20 @@ public class Movement : MonoBehaviour
 
     public void SwitchInControl()
     {
-        if(!_isSplit) 
+        if (!_isSplit)
             return;
-        
+
         _inControl = !_inControl;
     }
 
     public void Split()
     {
-        if (_playerIndex != 0 || _isSplit) 
+        if (_playerIndex != 0 || _isSplit)
             return;
-        
-        if (CurrentNode.ConnectedNodes.Count <= 0) 
+
+        if (CurrentNode.ConnectedNodes.Count <= 0)
             return;
-        
+
         _otherPlayer.transform.parent = CurrentNode.ConnectedNodes[0].transform;
         _otherPlayer.transform.localPosition = Vector3.zero;
         _otherPlayer.transform.localRotation = Quaternion.identity;
@@ -166,40 +169,51 @@ public class Movement : MonoBehaviour
         }
         if (!canMerge)
             return;
-        
+
         Movement otherPlayerMovement = _otherPlayer.GetComponent<Movement>();
-        
+
         otherPlayerMovement.CurrentNode.Occupied = false;
         otherPlayerMovement.CurrentNode = null;
-        
-        _otherPlayer.SetActive(false); 
-        
+
+        _otherPlayer.SetActive(false);
+
         _inControl = true;
         _isSplit = false;
+    }
+
+    private void SpawnVisual(Node targetNode)
+    {
+        DestroyVisualWithTween();
+        Vector3 offset = new Vector3(0f, 0.55f, 0f);
+        _currentVisual = Instantiate(_visualIndicator, targetNode.transform.position + offset, Quaternion.identity);
+        // Parent to the target node so it moves with it during world rotations
+        _currentVisual.transform.SetParent(targetNode.transform, true);
+        _currentVisual.transform.localScale = Vector3.zero;
+        _currentVisual.transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
     }
 
     private void PointClickMovement()
     {
         if (_isSplit && !_inControl)
             return;
-        
+
         Vector3 inputPosition;
 
         // Desktop
         if (Input.GetMouseButtonDown(0))
             inputPosition = Input.mousePosition;
-        
+
         // Mobile
         else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             inputPosition = Input.GetTouch(0).position;
-        
-        else return;
+        else
+            return;
 
         Ray ray = _camera.ScreenPointToRay(inputPosition);
 
-        if (!Physics.Raycast(ray, out RaycastHit hit, 1000f)) 
+        if (!Physics.Raycast(ray, out RaycastHit hit, 1000f))
             return;
-        
+
         Node targetNode = hit.collider.GetComponent<Node>();
 
         if (targetNode == null)
@@ -208,32 +222,38 @@ public class Movement : MonoBehaviour
         if (_movementRoutine != null)
         {
             _switchPathNode = targetNode;
+            SpawnVisual(targetNode);
             return;
         }
-        
+
         List<Node> nodes = FindPath(transform.parent.GetComponent<Node>(), targetNode);
 
         if (nodes != null)
+        {
+            SpawnVisual(targetNode);
             _movementRoutine = StartCoroutine(MoveAlongPath(nodes));
+        }
     }
 
     private void RecalculatePath(Node targetNode)
     {
         List<Node> nodes = FindPath(transform.parent.GetComponent<Node>(), targetNode);
-        
+
         _switchPathNode = null;
-        
+
         if (nodes != null)
             _movementRoutine = StartCoroutine(MoveAlongPath(nodes));
+        else
+            DestroyVisualWithTween(); // no path found after recalc, clean up
     }
-    
+
     private IEnumerator MoveAlongPath(List<Node> path)
     {
         if (_mergeButton.enabled)
             _mergeButton.interactable = false;
-        
+
         CurrentNode = path[0];
-        
+
         transform.SetParent(CurrentNode.transform);
         transform.position = CurrentNode.transform.position;
 
@@ -243,32 +263,31 @@ public class Movement : MonoBehaviour
         for (int i = 1; i < path.Count; i++)
         {
             Node nextNode = path[i];
-            
+
             _onStartMove.Invoke();
             if (!CurrentNode.ConnectedNodes.Contains(nextNode) || nextNode.Occupied)
             {
                 _movementRoutine = null;
                 foreach (Animator animator in _animator)
-                {
                     animator.SetTrigger("idle");
-                }
 
                 if (nextNode.Occupied)
                     if (_mergeButton.enabled)
                         _mergeButton.interactable = true;
-                
+
+                DestroyVisualWithTween();
                 yield break;
             }
-            
+
             Vector3 headingA = CurrentNode.transform.position - _camera.transform.position;
             Vector3 headingB = nextNode.transform.position - _camera.transform.position;
-            
+
             float distanceA = Vector3.Dot(headingA, _camera.transform.forward);
             float distanceB = Vector3.Dot(headingB, _camera.transform.forward);
 
             Vector3 startOffset = Vector3.zero;
-            Vector3 endOffset =  Vector3.zero;
-            
+            Vector3 endOffset = Vector3.zero;
+
             if (distanceA < distanceB)
             {
                 Vector3 direction = Flatten(nextNode.transform.position) - Flatten(CurrentNode.transform.position);
@@ -279,20 +298,18 @@ public class Movement : MonoBehaviour
                 Vector3 direction = Flatten(CurrentNode.transform.position) - Flatten(nextNode.transform.position);
                 startOffset = (nextNode.transform.position + direction) - CurrentNode.transform.position;
             }
-            
 
             Transform startPosition = CurrentNode.transform;
             Transform targetPosition = nextNode.transform;
-            
-            
-            float duration = 1/_moveSpeed;
+
+            float duration = 1 / _moveSpeed;
             float elapsed = 0f;
-            
+
             Vector3 lookDirection = nextNode.transform.position - CurrentNode.transform.position;
             lookDirection.y = 0f;
             if (lookDirection.sqrMagnitude > 0f)
                 transform.rotation = Quaternion.LookRotation(lookDirection);
-            
+
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
@@ -302,42 +319,54 @@ public class Movement : MonoBehaviour
                 yield return null;
             }
 
-            
             transform.position = targetPosition.position;
-            
+
             CurrentNode.Occupied = false;
             nextNode.Occupied = true;
-            
+
             CurrentNode = nextNode;
 
             transform.SetParent(CurrentNode.transform);
 
             if (_switchPathNode != null)
             {
+                // Destroy visual before recalculating — RecalculatePath will start
+                // a new coroutine which already has the new visual from PointClickMovement
+                DestroyVisualWithTween();
                 RecalculatePath(_switchPathNode);
                 foreach (Animator animator in _animator)
                     animator.SetTrigger("idle");
+
                 yield break;
             }
         }
+
         foreach (Animator animator in _animator)
-        {
             animator.SetTrigger("idle");
-        }
+
+        DestroyVisualWithTween();
+
         _movementRoutine = null;
 
         bool nextToOtherPlayer = false;
-        
+
         foreach (Node node in CurrentNode.ConnectedNodes)
             if (node.Occupied)
             {
                 nextToOtherPlayer = true;
                 break;
             }
-        
 
         if (nextToOtherPlayer)
             if (_mergeButton.enabled)
                 _mergeButton.interactable = true;
+    }
+
+    private void DestroyVisualWithTween()
+    {
+        if (_currentVisual == null) return;
+        GameObject visual = _currentVisual;
+        _currentVisual = null;
+        visual.transform.DOScale(0f, 0.15f).SetEase(Ease.InBack).OnComplete(() => Destroy(visual));
     }
 }
