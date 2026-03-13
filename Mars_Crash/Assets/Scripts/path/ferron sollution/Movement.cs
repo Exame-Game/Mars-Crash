@@ -23,6 +23,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private int _playerIndex;
     [SerializeField] private float _moveSpeed;
 
+    [SerializeField] private float _visualObjectDuration = 1.5f;
+
     public Node CurrentNode;
     public bool _inControl;
     public bool _isSplit;
@@ -35,8 +37,6 @@ public class Movement : MonoBehaviour
 
     private Coroutine _movementRoutine;
     private Node _switchPathNode;
-
-    private GameObject _currentVisual;
 
     #endregion
 
@@ -183,13 +183,19 @@ public class Movement : MonoBehaviour
 
     private void SpawnVisual(Node targetNode)
     {
-        DestroyVisualWithTween();
-        Vector3 offset = new Vector3(0f, 0.55f, 0f);
-        _currentVisual = Instantiate(_visualIndicator, targetNode.transform.position + offset, Quaternion.identity);
-        // Parent to the target node so it moves with it during world rotations
-        _currentVisual.transform.SetParent(targetNode.transform, true);
-        _currentVisual.transform.localScale = Vector3.zero;
-        _currentVisual.transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
+        Vector3 spawnPos = new Vector3(targetNode.transform.position.x, targetNode.transform.position.y + .55f, targetNode.transform.position.z);
+        GameObject visual = Instantiate(_visualIndicator, spawnPos, Quaternion.identity);
+        visual.transform.SetParent(targetNode.transform, true);
+        visual.transform.localScale = Vector3.zero;
+        visual.transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                DOVirtual.DelayedCall(_visualObjectDuration, () =>
+                {
+                    visual.transform.DOScale(0f, 0.15f).SetEase(Ease.InBack)
+                        .OnComplete(() => Destroy(visual));
+                });
+            });
     }
 
     private void PointClickMovement()
@@ -219,20 +225,18 @@ public class Movement : MonoBehaviour
         if (targetNode == null)
             return;
 
+        SpawnVisual(targetNode);
+
         if (_movementRoutine != null)
         {
             _switchPathNode = targetNode;
-            SpawnVisual(targetNode);
             return;
         }
 
         List<Node> nodes = FindPath(transform.parent.GetComponent<Node>(), targetNode);
 
         if (nodes != null)
-        {
-            SpawnVisual(targetNode);
             _movementRoutine = StartCoroutine(MoveAlongPath(nodes));
-        }
     }
 
     private void RecalculatePath(Node targetNode)
@@ -243,8 +247,6 @@ public class Movement : MonoBehaviour
 
         if (nodes != null)
             _movementRoutine = StartCoroutine(MoveAlongPath(nodes));
-        else
-            DestroyVisualWithTween(); // no path found after recalc, clean up
     }
 
     private IEnumerator MoveAlongPath(List<Node> path)
@@ -275,7 +277,6 @@ public class Movement : MonoBehaviour
                     if (_mergeButton.enabled)
                         _mergeButton.interactable = true;
 
-                DestroyVisualWithTween();
                 yield break;
             }
 
@@ -330,9 +331,6 @@ public class Movement : MonoBehaviour
 
             if (_switchPathNode != null)
             {
-                // Destroy visual before recalculating — RecalculatePath will start
-                // a new coroutine which already has the new visual from PointClickMovement
-                DestroyVisualWithTween();
                 RecalculatePath(_switchPathNode);
                 foreach (Animator animator in _animator)
                     animator.SetTrigger("idle");
@@ -343,8 +341,6 @@ public class Movement : MonoBehaviour
 
         foreach (Animator animator in _animator)
             animator.SetTrigger("idle");
-
-        DestroyVisualWithTween();
 
         _movementRoutine = null;
 
@@ -360,13 +356,5 @@ public class Movement : MonoBehaviour
         if (nextToOtherPlayer)
             if (_mergeButton.enabled)
                 _mergeButton.interactable = true;
-    }
-
-    private void DestroyVisualWithTween()
-    {
-        if (_currentVisual == null) return;
-        GameObject visual = _currentVisual;
-        _currentVisual = null;
-        visual.transform.DOScale(0f, 0.15f).SetEase(Ease.InBack).OnComplete(() => Destroy(visual));
     }
 }
