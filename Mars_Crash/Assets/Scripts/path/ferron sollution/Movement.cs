@@ -143,7 +143,8 @@ public class Movement : MonoBehaviour
         _otherPlayer.SetActive(true);
         _onSplit.Invoke();
         _isSplit = true;
-        _inControl = true;
+        _inControl = false;
+        _otherPlayer.GetComponent<Movement>()._inControl = true;
     }
 
     public void Merge()
@@ -252,8 +253,6 @@ public class Movement : MonoBehaviour
                 startOffset = (nextNode.transform.position + direction) - CurrentNode.transform.position;
             }
             
-            CurrentNode.Occupied = false;
-            nextNode.Occupied = true;
 
             Transform startPosition = CurrentNode.transform;
             Transform targetPosition = nextNode.transform;
@@ -276,6 +275,9 @@ public class Movement : MonoBehaviour
                 yield return null;
             }
             transform.position = targetPosition.position;
+            
+            CurrentNode.Occupied = false;
+            nextNode.Occupied = true;
             
             CurrentNode = nextNode;
 
