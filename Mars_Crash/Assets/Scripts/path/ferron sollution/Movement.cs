@@ -11,6 +11,8 @@ public class Movement : MonoBehaviour
 
     [SerializeField] private UnityEvent _onSplit;
     [SerializeField] private UnityEvent _onMerge;
+    [SerializeField] private UnityEvent _onStartMove;
+    [SerializeField] private Animator[] _animator;
     
     [SerializeField] private GameObject _otherPlayer;
     [SerializeField] private int _playerIndex;
@@ -25,8 +27,8 @@ public class Movement : MonoBehaviour
     public Node CurrentNode;
     private Coroutine _movementRoutine;
 
-    private bool _inControl;
-    private bool _isSplit;
+    public  bool _inControl;
+    public bool _isSplit;
     
     #endregion
 
@@ -44,7 +46,7 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        PointClickMovement();
+        if (_movementRoutine == null) PointClickMovement();
     }
 
     private void Start()
@@ -54,6 +56,8 @@ public class Movement : MonoBehaviour
 
     private List<Node> FindPath(Node startNode, Node targetNode)
     {
+        _onStartMove.Invoke();
+        
         if (startNode == null || targetNode == null)
             return null;
 
@@ -144,6 +148,7 @@ public class Movement : MonoBehaviour
 
     public void Merge()
     {
+        _onMerge.Invoke();
         bool canMerge = false;
         for (int i = 0; i < CurrentNode.ConnectedNodes.Count; i++)
         {
@@ -197,7 +202,7 @@ public class Movement : MonoBehaviour
         List<Node> nodes = FindPath(transform.parent.GetComponent<Node>(), targetNode);
 
         if (nodes != null)
-            StartCoroutine(MoveAlongPath(nodes));
+            _movementRoutine = StartCoroutine(MoveAlongPath(nodes));
     }
     
     private IEnumerator MoveAlongPath(List<Node> path)
@@ -207,13 +212,23 @@ public class Movement : MonoBehaviour
         transform.SetParent(CurrentNode.transform);
         transform.position = CurrentNode.transform.position;
 
+        foreach (Animator animator in _animator)
+        {
+            animator.SetTrigger("walk");
+        }
+
         for (int i = 1; i < path.Count; i++)
         {
             Node nextNode = path[i];
             
+            _onStartMove.Invoke();
             if (!CurrentNode.ConnectedNodes.Contains(nextNode) || nextNode.Occupied)
             {
                 _movementRoutine = null;
+                foreach (Animator animator in _animator)
+                {
+                    animator.SetTrigger("idle");
+                }
                 yield break;
             }
             
@@ -246,7 +261,12 @@ public class Movement : MonoBehaviour
             
             float duration = 1/_moveSpeed;
             float elapsed = 0f;
-
+            
+            Vector3 lookDirection = nextNode.transform.position - CurrentNode.transform.position;
+            lookDirection.y = 0f;
+            if (lookDirection.sqrMagnitude > 0f)
+                transform.rotation = Quaternion.LookRotation(lookDirection);
+            
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
@@ -260,6 +280,10 @@ public class Movement : MonoBehaviour
             CurrentNode = nextNode;
 
             transform.SetParent(CurrentNode.transform);
+        }
+        foreach (Animator animator in _animator)
+        {
+            animator.SetTrigger("idle");
         }
         _movementRoutine = null;
     }

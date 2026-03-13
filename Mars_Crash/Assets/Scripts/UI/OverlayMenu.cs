@@ -5,8 +5,10 @@ public class OverlayMenu : MonoBehaviour
     [SerializeField] private VolumeSettings _volumeSettings;
     [SerializeField] private GameObject _overlayMenu;
     [SerializeField] private GameObject _overlayMenuButton;
+    [SerializeField] private GameObject _tutorialPanel;
+    [SerializeField] private GameObject _endScreenPanel;
 
-    public void Open()
+    public void OpenSettings()
     {
         SoundManager.Instance.PlaySound2D("ButtonClick");
         _overlayMenu.SetActive(true);
@@ -14,7 +16,7 @@ public class OverlayMenu : MonoBehaviour
         _volumeSettings.LoadVolume();
     }
 
-    public void Close()
+    public void CloseSettings()
     {
         SoundManager.Instance.PlaySound2D("ButtonClick");
         _overlayMenu.SetActive(false);
@@ -28,5 +30,25 @@ public class OverlayMenu : MonoBehaviour
         SceneSwitchManager.Instance.SwitchScene("MainMenu");
         MusicManager.Instance.PlayMusic("MainMenu", 0.5f);
         _volumeSettings.SaveVolume();
+    }
+
+    public void OpenTuturial()
+    {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
+        _overlayMenu.SetActive(false);
+        _tutorialPanel.SetActive(true);
+    }
+
+    public void CloseTutorial()
+    {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
+        _overlayMenuButton.SetActive(true);
+        _tutorialPanel.SetActive(false);
+    }
+
+    public void Endscreen()
+    {
+        SoundManager.Instance.PlaySound2D("ButtonClick");
+        _endScreenPanel.SetActive(true);
     }
 }
