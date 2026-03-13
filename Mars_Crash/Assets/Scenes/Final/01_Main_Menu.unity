@@ -5701,9 +5701,12 @@ MonoBehaviour:
   _animator:
   - {fileID: 1919146830}
   - {fileID: 557547172}
+  _mergeButton: {fileID: 1853900307}
   _otherPlayer: {fileID: 1799969567}
+  _visualIndicator: {fileID: 4691092231958716448, guid: 1c2f6b24990a74d4db10c1579a4dd799, type: 3}
   _playerIndex: 0
   _moveSpeed: 3
+  _visualObjectDuration: 0.5
   CurrentNode: {fileID: 0}
   _inControl: 0
   _isSplit: 0
@@ -9642,9 +9645,12 @@ MonoBehaviour:
         m_CallState: 2
   _animator:
   - {fileID: 994008745}
+  _mergeButton: {fileID: 1853900307}
   _otherPlayer: {fileID: 0}
+  _visualIndicator: {fileID: 4691092231958716448, guid: 1c2f6b24990a74d4db10c1579a4dd799, type: 3}
   _playerIndex: 1
   _moveSpeed: 3
+  _visualObjectDuration: 0.5
   CurrentNode: {fileID: 0}
   _inControl: 0
   _isSplit: 0
