@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Movement : MonoBehaviour
 {
@@ -18,7 +19,11 @@ public class Movement : MonoBehaviour
     [SerializeField] private int _playerIndex;
     [SerializeField] private float _moveSpeed;
     
+    [SerializeField] private Button _mergeButton;
+    
     private Camera _camera;
+
+    private Node _switchPathNode;
     
     private Queue<Node> _queue = new Queue<Node>(256);
     private HashSet<Node> _visited = new HashSet<Node>();
@@ -46,7 +51,7 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        if (_movementRoutine == null) PointClickMovement();
+        PointClickMovement();
     }
 
     private void Start()
@@ -199,15 +204,35 @@ public class Movement : MonoBehaviour
 
         if (targetNode == null)
             return;
+
+        if (_movementRoutine != null)
+        {
+            _switchPathNode = targetNode;
+            return;
+        }
         
         List<Node> nodes = FindPath(transform.parent.GetComponent<Node>(), targetNode);
 
         if (nodes != null)
             _movementRoutine = StartCoroutine(MoveAlongPath(nodes));
     }
+
+    private void RecalculatePath(Node targetNode)
+    {
+        List<Node> nodes = FindPath(transform.parent.GetComponent<Node>(), targetNode);
+        
+        _switchPathNode = null;
+        
+        if (nodes != null)
+            _movementRoutine = StartCoroutine(MoveAlongPath(nodes));
+    }
     
     private IEnumerator MoveAlongPath(List<Node> path)
     {
+        Debug.Log("start");
+        if (_mergeButton.enabled)
+            _mergeButton.interactable = false;
+        
         CurrentNode = path[0];
         
         transform.SetParent(CurrentNode.transform);
@@ -230,6 +255,11 @@ public class Movement : MonoBehaviour
                 {
                     animator.SetTrigger("idle");
                 }
+
+                if (nextNode.Occupied)
+                    if (_mergeButton.enabled)
+                        _mergeButton.interactable = true;
+                
                 yield break;
             }
             
@@ -274,6 +304,8 @@ public class Movement : MonoBehaviour
                 transform.position = Vector3.Lerp(startPosition.position + startOffset, targetPosition.position + endOffset, t);
                 yield return null;
             }
+
+            
             transform.position = targetPosition.position;
             
             CurrentNode.Occupied = false;
@@ -282,11 +314,39 @@ public class Movement : MonoBehaviour
             CurrentNode = nextNode;
 
             transform.SetParent(CurrentNode.transform);
+
+            if (_switchPathNode != null)
+            {
+                RecalculatePath(_switchPathNode);
+                foreach (Animator animator in _animator)
+                {
+                    animator.SetTrigger("idle");
+                }
+                yield break;
+            }
         }
+        Debug.Log("done");
         foreach (Animator animator in _animator)
         {
             animator.SetTrigger("idle");
         }
         _movementRoutine = null;
+
+        bool nextToOtherPlayer = false;
+        
+        foreach (Node node in CurrentNode.ConnectedNodes)
+        {
+            if (node.Occupied)
+            {
+                nextToOtherPlayer = true;
+                break;
+            }
+        }
+
+        if (nextToOtherPlayer)
+        {
+            if (_mergeButton.enabled)
+                _mergeButton.interactable = true;
+        }
     }
 }
