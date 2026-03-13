@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/demoScene/WalkingDemoLevel.unity
     guid: 21175de275996474a98772cdcb09ecbe
   - enabled: 1
-    path: Assets/Scenes/Menus/MainMenu.unity
+    path: Assets/Scenes/Final/MainMenu.unity
     guid: 3d03ab640e2f3904db68eb533dcb71ba
   - enabled: 0
     path: Assets/Scenes/Levels/FirstLevel.unity
